@@ -10,6 +10,10 @@ RUN apt-get update && \
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install -j"$(nproc)" mysqli pdo_mysql iconv gd soap zip
 
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 CMD [ "docker-php-entrypoint", "php-fpm" ]
